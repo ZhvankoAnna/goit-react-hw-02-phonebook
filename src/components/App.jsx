@@ -18,13 +18,13 @@ class App extends Component {
   };
 
   getFormData = data => {
-    const {contacts} = this.state;
+    const { contacts } = this.state;
     const newName = data.name;
-    const isDublicate = contacts.find(item => item.name === newName)
-    if(isDublicate) {
+    const isDublicate = contacts.find(item => item.name === newName);
+    if (isDublicate) {
       return Notify.failure(`${newName} is already in contacts`);
     }
-    const newObj = {id: nanoid(5), ...data}
+    const newObj = { id: nanoid(5), ...data };
     this.setState(prevState => ({
       contacts: [...prevState.contacts, newObj],
     }));
@@ -39,11 +39,11 @@ class App extends Component {
   }
 
   onDeleteContact = id => {
-    const { contacts } = this.state;
-    const newArr = contacts.filter(item => item.id !== id);
-    this.setState({
-      contacts: newArr,
-    })
+    this.setState(prevState => {
+      const { contacts } = prevState;
+      const newArr = contacts.filter(item => item.id !== id);
+      return { contacts: newArr };
+    });
   };
 
   handleFilterChange = e => {
@@ -61,8 +61,12 @@ class App extends Component {
 
         <h2 className={css.title}>Contacts</h2>
         <Filter value={filter} onChange={handleFilterChange} />
-        {this.state.contacts.length !== 0 && <ContactList arr={filteredContacts} onDeleteContact={onDeleteContact}/>}
-
+        {this.state.contacts.length !== 0 && (
+          <ContactList
+            arr={filteredContacts}
+            onDeleteContact={onDeleteContact}
+          />
+        )}
       </div>
     );
   }
